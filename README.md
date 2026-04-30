@@ -1,6 +1,6 @@
 # Synapse Flask Example
 
-Example showing how to use [pyrx-synapse](https://pypi.org/project/pyrx-synapse/) with Flask.
+All 16 SDK endpoints with [pyrx-synapse](https://pypi.org/project/pyrx-synapse/) + Flask.
 
 ## Setup
 
@@ -11,11 +11,8 @@ Example showing how to use [pyrx-synapse](https://pypi.org/project/pyrx-synapse/
 
 ## Endpoints
 
-- `POST /api/track` — Track an event
-- `POST /api/identify` — Identify a contact
-- `POST /api/send` — Send email
+**Core:** POST /api/track, /api/track/batch, /api/identify, /api/identify/batch, /api/send
+**Contacts:** GET /api/contacts, GET/PUT/DELETE /api/contacts/<id>
+**Templates:** GET/POST /api/templates, GET/PUT/DELETE /api/templates/<slug>, POST /api/templates/<slug>/preview
 
-## Learn more
-
-- [Synapse Documentation](https://synapse.pyrx.tech/developers)
-- [Python SDK Reference](https://synapse.pyrx.tech/developers/sdks/python)
+- [Synapse Docs](https://synapse.pyrx.tech/developers)
