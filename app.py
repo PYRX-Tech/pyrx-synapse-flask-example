@@ -7,7 +7,7 @@ load_dotenv()
 app = Flask(__name__)
 
 def get_synapse() -> Synapse:
-    return Synapse(api_key=os.environ["SYNAPSE_API_KEY"], workspace_id=os.environ["SYNAPSE_WORKSPACE_ID"])
+    return Synapse(api_key=os.environ["SYNAPSE_API_KEY"], workspace_id=os.environ["SYNAPSE_WORKSPACE_ID"], base_url=os.environ.get("SYNAPSE_API_URL", "https://synapse-api.pyrx.tech"))
 
 # ── Core ──
 @app.post("/api/track")
