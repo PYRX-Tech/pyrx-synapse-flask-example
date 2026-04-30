@@ -2,12 +2,12 @@
 set -uo pipefail
 source "$(dirname "$0")/../test-helpers.sh"
 [[ -z "${SYNAPSE_API_KEY:-}" ]] && echo "Set SYNAPSE_API_KEY" && exit 1
-BASE_URL="http://localhost:5000"
+BASE_URL="http://localhost:4006"
 
 echo "Installing..."
-pip install -q -r requirements.txt > /dev/null 2>&1
+pip install -q -r requirements.txt 2>&1 | tail -1 > /dev/null 2>&1
 
-echo "Starting server on port 5000..."
+echo "Starting server on port 4006..."
 python app.py > /dev/null 2>&1 &
 SERVER_PID=$!
 trap "kill $SERVER_PID 2>/dev/null; wait $SERVER_PID 2>/dev/null" EXIT
