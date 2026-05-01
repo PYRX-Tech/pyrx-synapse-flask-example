@@ -1,7 +1,18 @@
 import os
+import re
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from pyrx_synapse import Synapse
+
+def _to_snake(name: str) -> str:
+    return re.sub(r'([a-z])([A-Z])', r'\1_\2', name).lower()
+
+def snake_keys(d):
+    if isinstance(d, list):
+        return [snake_keys(i) if isinstance(i, dict) else i for i in d]
+    if isinstance(d, dict):
+        return {_to_snake(k): snake_keys(v) if isinstance(v, (dict, list)) else v for k, v in d.items()}
+    return d
 
 load_dotenv()
 app = Flask(__name__)
@@ -26,7 +37,7 @@ def track_event():
 def track_batch():
     b = request.get_json()
     with get_synapse() as c:
-        r = c.track_batch(events=b["events"])
+        r = c.track_batch(events=snake_keys(b["events"]))
     return jsonify(r)
 
 @app.post("/api/identify")
@@ -40,14 +51,14 @@ def identify():
 def identify_batch():
     b = request.get_json()
     with get_synapse() as c:
-        r = c.identify_batch(contacts=b["contacts"])
+        r = c.identify_batch(contacts=snake_keys(b["contacts"]))
     return jsonify(r)
 
 @app.post("/api/send")
 def send():
-    b = request.get_json()
+    b = snake_keys(request.get_json())
     with get_synapse() as c:
-        r = c.send(template_slug=b["templateSlug"], to={"user_id": b.get("userId",""), "email": b.get("email","")}, attributes=b.get("attributes", {}))
+        r = c.send(template_slug=b.get("template_slug", ""), to=b.get("to", {}), attributes=b.get("attributes", {}))
     return jsonify(r)
 
 # Contacts
